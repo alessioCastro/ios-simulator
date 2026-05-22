@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+  <title>iPhone 16 Pro Max – Mockup Funcional</title>
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <button class="up scale">+</button>
+
+  <div class="iphone">
+    <div class="button silent"></div>
+    <div class="button vol-up"></div>
+    <div class="button vol-down"></div>
+    <div class="button power"></div>
+
+    <div class="dynamic-island-detail">
+      <div class="front-camera"></div>
+    </div>
+
+    <div class="screen">
+
+      <div class="dynamic-island hidden">
+        <div class="dynamic-island-left-side">
+          <span>Claro BR</span>
+          <svg class="bell-slash" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+            <path fill="#fff"
+              d="M41-24.9c-9.4-9.4-24.6-9.4-33.9 0S-2.3-.3 7 9.1l528 528c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-87.5-87.5c17.2-2.4 30.5-17.3 30.5-35.2 0-8.1-2.7-15.9-7.8-22.2l-9.8-12.2C464.4 308.5 448 261.8 448 213.7l0-21.7c0-77.4-55-142-128-156.8l0-3.2c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 3.2c-38.6 7.8-72.2 29.6-95.2 59.7L41-24.9zm87 238.5c0 48.1-16.4 94.8-46.4 132.4l-9.8 12.2c-5 6.3-7.8 14.1-7.8 22.2 0 19.6 15.9 35.5 35.5 35.5l235.3 0-206.9-206.9 0 4.5zM288 512c29.8 0 54.9-20.4 62-48l-124 0c7.1 27.6 32.2 48 62 48z" />
+          </svg>
+        </div>
+        <div class="dynamic-island-right-side">
+          <svg class="signal-icon" data-level="3" viewBox="0 0 22 18">
+            <rect data-bar="1" x="0" y="12" width="4" height="6" rx="1" />
+            <rect data-bar="2" x="6" y="8" width="4" height="10" rx="1" />
+            <rect data-bar="3" x="12" y="4" width="4" height="14" rx="1" />
+            <rect data-bar="4" x="18" y="0" width="4" height="18" rx="1" />
+          </svg>
+          <svg class="wifi-icon" data-level="3" viewBox="0 -5 34 34">
+            <path data-bar="1"
+              d="m16.815 24 5.475-5.415-.87-.713a7.02 7.02 0 0 0-4.625-1.5h.013-.066a7.6 7.6 0 0 0-4.567 1.515l.02-.014-.862.713.795.787 3.96 3.915z" />
+            <path data-bar="2"
+              d="M27.405 12.03A15.67 15.67 0 0 0 16.83 7.95h-.674l-.007.015a15.72 15.72 0 0 0-9.958 4.076l.013-.012-.787.713 3.893 3.855.72-.63c1.791-1.606 4.171-2.587 6.78-2.587s4.989.982 6.79 2.596l-.01-.008.72.63 3.893-3.854z" />
+            <path data-bar="3"
+              d="M16.807 0h-.045C10.572 0 4.942 2.4.752 6.319l.013-.012L0 7.02l3.862 3.826.72-.66c3.201-2.952 7.494-4.763 12.21-4.763s9.009 1.81 12.222 4.774l-.012-.011.72.66 3.862-3.826-.765-.713A23.3 23.3 0 0 0 16.845 0h-.041.002z" />
+          </svg>
+          <div class="battery"></div>
+        </div>
+      </div>
+      <!-- <div class="screen-content">
+        Tela desligada (estado inicial)
+      </div> -->
+      <div class="boot-screen hidden">
+        <svg class="apple-logo" fill="#fff" stroke="#fff" viewBox="0 0 24 24">
+          <path
+            d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z">
+          </path>
+        </svg>
+      </div>
+
+      <div class="sleep-screen hidden"></div>
+
+      <div class="lockscreen hidden">
+        <div class="lockscreen-image-overlay">
+          <img class="inverse-lockscreen-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Our_Holy_Mother_Of_Perpetual_Succour.jpg" alt="" />
+          <img class="lockscreen-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Our_Holy_Mother_Of_Perpetual_Succour.jpg" alt="" />
+        </div>
+        <div class="lockscreen-content">
+          <div class="lockscreen-status">
+            <span class="lockscreen-date">Segunda-feira, 25 de dezembro</span>
+            <span class="lockscreen-time">09:41</span>
+          </div>
+          <div class="lockscreen-footer">
+            <button class="flashlight-btn liquid-glass">
+              <svg class="flashlight" width="20px" height="20px" viewBox="0 0 20 20" version="1.1"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs></defs>
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="flashlight" fill="#fff">
+                    <path
+                      d="M11,8 C11,7.44771525 10.5522847,7 10,7 C9.44771525,7 9,7.44771525 9,8 L9,9 C9,9.55228475 9.44771525,10 10,10 C10.5522847,10 11,9.55228475 11,9 L11,8 Z M13,7 L13,17.9941413 C13,19.1019465 12.1017394,20 11.0020869,20 L8.99791312,20 C7.89449617,20 7,19.1029399 7,17.9941413 L7,7 L5,5 L5,3 L15,3 L15,5 L13,7 Z M5,0 L15,0 L15,2 L5,2 L5,0 Z"
+                      id="Combined-Shape"></path>
+                  </g>
+                </g>
+              </svg>
+            </button>
+            <div class="dont-disturb">
+              <svg class="moon" width="18px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <path fill="#fff"
+                  d="M320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576C388.8 576 451.3 548.8 497.3 504.6C504.6 497.6 506.7 486.7 502.6 477.5C498.5 468.3 488.9 462.6 478.8 463.4C473.9 463.8 469 464 464 464C362.4 464 280 381.6 280 280C280 207.9 321.5 145.4 382.1 115.2C391.2 110.7 396.4 100.9 395.2 90.8C394 80.7 386.6 72.5 376.7 70.3C358.4 66.2 339.4 64 320 64z" />
+              </svg>
+              <span>Não perturbe</span>
+            </div>
+            <button class="camera-btn liquid-glass">
+              <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M2 8.37722C2 8.0269 2 7.85174 2.01462 7.70421C2.1556 6.28127 3.28127 5.1556 4.70421 5.01462C4.85174 5 5.03636 5 5.40558 5C5.54785 5 5.61899 5 5.67939 4.99634C6.45061 4.94963 7.12595 4.46288 7.41414 3.746C7.43671 3.68986 7.45781 3.62657 7.5 3.5C7.54219 3.37343 7.56329 3.31014 7.58586 3.254C7.87405 2.53712 8.54939 2.05037 9.32061 2.00366C9.38101 2 9.44772 2 9.58114 2H14.4189C14.5523 2 14.619 2 14.6794 2.00366C15.4506 2.05037 16.126 2.53712 16.4141 3.254C16.4367 3.31014 16.4578 3.37343 16.5 3.5C16.5422 3.62657 16.5633 3.68986 16.5859 3.746C16.874 4.46288 17.5494 4.94963 18.3206 4.99634C18.381 5 18.4521 5 18.5944 5C18.9636 5 19.1483 5 19.2958 5.01462C20.7187 5.1556 21.8444 6.28127 21.9854 7.70421C22 7.85174 22 8.0269 22 8.37722V16.2C22 17.8802 22 18.7202 21.673 19.362C21.3854 19.9265 20.9265 20.3854 20.362 20.673C19.7202 21 18.8802 21 17.2 21H6.8C5.11984 21 4.27976 21 3.63803 20.673C3.07354 20.3854 2.6146 19.9265 2.32698 19.362C2 18.7202 2 17.8802 2 16.2V8.37722Z"
+                  stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                  d="M12 16.5C14.2091 16.5 16 14.7091 16 12.5C16 10.2909 14.2091 8.5 12 8.5C9.79086 8.5 8 10.2909 8 12.5C8 14.7091 9.79086 16.5 12 16.5Z"
+                  stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="home hidden">
+        <div class="home-screen-image-overlay">
+          <img class="inverse-home-screen-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Our_Holy_Mother_Of_Perpetual_Succour.jpg" alt="" />
+          <img class="home-screen-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Our_Holy_Mother_Of_Perpetual_Succour.jpg" alt="" />
+        </div>
+        <div class="app-grid">
+          <div class="app" data-app="Safari">
+            <div class="app-icon"></div>
+            <span class="app-label">Safari</span>
+          </div>
+          <div class="app" data-app="Fotos">
+            <div class="app-icon"></div>
+            <span class="app-label">Fotos</span>
+          </div>
+          <div class="app" data-app="Ajustes">
+            <div class="app-icon"></div>
+            <span class="app-label">Ajustes</span>
+          </div>
+          <div class="app" data-app="App">
+            <div class="app-icon"></div>
+            <span class="app-label">App</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-container hidden">
+        <div class="app-view">
+          <div class="app-header">
+            <span class="app-title">App</span>
+          </div>
+          <div class="app-content">
+            Conteúdo do App
+          </div>
+        </div>
+      </div>
+
+      <div class="multitask hidden">
+        <div class="app-cards"></div>
+      </div>
+
+      <div class="gesture-bar hidden"></div>
+
+      <div class="volume-hud liquid-glass hidden">
+        <div class="volume-bar">
+          <div class="volume-level"></div>
+        </div>
+        <svg class="sound-icon" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+          <path fill="#ccc"
+            d="M144 416L192 416L326.1 535.2C332.5 540.9 340.7 544 349.2 544C368.4 544 384 528.4 384 509.2L384 130.8C384 111.6 368.4 96 349.2 96C340.7 96 332.5 99.1 326.1 104.8L192 224L144 224C117.5 224 96 245.5 96 272L96 368C96 394.5 117.5 416 144 416zM476.6 245.5C466.3 237.1 451.2 238.7 442.8 249C434.4 259.3 436 274.4 446.3 282.8C457.1 291.6 464 305 464 320C464 335 457.1 348.4 446.3 357.3C436 365.7 434.5 380.8 442.8 391.1C451.1 401.4 466.3 402.9 476.6 394.6C498.1 376.9 512 350.1 512 320C512 289.9 498.1 263.1 476.5 245.5z" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="glass"></div>
+  </div>
+
+  <button class="down scale">-</button>
+
+  <audio src="./audio.mp3" autoplay></audio>
+
+  <script>
+    /* =========================
+   FSM - ESTADOS DO SISTEMA
+========================= */
+    const STATES = {
+      OFF: 'OFF',
+      BOOTING: 'BOOTING',
+      LOCKED_AWAKE: 'LOCKED_AWAKE',
+      LOCKED_SLEEP: 'LOCKED_SLEEP',
+      UNLOCKING: 'UNLOCKING',
+      UNLOCKED: 'UNLOCKED'
+    };
+
+    let currentState = STATES.LOCKED_SLEEP;
+
+    /* =========================
+       ELEMENTOS
+    ========================= */
+    const powerButton = document.querySelector('.button.power');
+    const volumeUpButton = document.querySelector('.button.vol-up');
+    const volumeDownButton = document.querySelector('.button.vol-down');
+    const volumeHud = document.querySelector('.volume-hud');
+    const volumeLevel = document.querySelector('.volume-level');
+    const bootScreen = document.querySelector('.boot-screen');
+    const lockscreen = document.querySelector('.lockscreen');
+    const lockscreenContent = document.querySelector('.lockscreen-content');
+    const sleepScreen = document.querySelector('.sleep-screen');
+    const screen = document.querySelector('.screen');
+    const dynamicIsland = document.querySelector('.dynamic-island');
+    const signalBarsIcon = document.querySelector('.signal-icon');
+    const wifiSignalIcon = document.querySelector('.wifi-icon');
+    const battery = document.querySelector('.battery');
+    const home = document.querySelector('.home');
+    const gestureBar = document.querySelector('.gesture-bar');
+    const multitask = document.querySelector('.multitask');
+    const appCards = document.querySelector('.app-cards');
+    const audio = document.querySelector('audio');
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+
+    const source = ctx.createMediaElementSource(audio);
+    const gain = ctx.createGain();
+
+    source.connect(gain).connect(ctx.destination);
+
+    /* =========================
+       FSM CORE
+    ========================= */
+    function transition(to) {
+      if (currentState === to) return;
+
+      const valid = {
+        OFF: [STATES.BOOTING],
+        BOOTING: [STATES.LOCKED_AWAKE],
+        LOCKED_AWAKE: [STATES.LOCKED_SLEEP, STATES.UNLOCKING],
+        LOCKED_SLEEP: [STATES.LOCKED_AWAKE],
+        UNLOCKING: [STATES.UNLOCKED],
+        UNLOCKED: [STATES.LOCKED_SLEEP]
+      };
+
+      if (!valid[currentState].includes(to)) {
+        console.warn(`FSM: transição inválida ${currentState} → ${to}`);
+        return;
+      }
+
+      exitState(currentState);
+      currentState = to;
+      enterState(to);
+    }
+
+    /* =========================
+       EXIT STATE
+    ========================= */
+    function exitState(state) {
+      switch (state) {
+
+        case STATES.LOCKED_AWAKE:
+          lockscreenContent.style.transition = '';
+          lockscreenContent.style.transform = '';
+          break;
+
+        case STATES.UNLOCKED:
+          home.classList.remove('active');
+          home.classList.add('hidden');
+          gestureBar.classList.remove('active');
+          gestureBar.classList.add('hidden');
+          break;
+
+      }
+    }
+
+    /* =========================
+       ENTER STATE
+    ========================= */
+    function enterState(state) {
+      switch (state) {
+
+        case STATES.BOOTING:
+          boot();
+          break;
+
+        case STATES.LOCKED_AWAKE:
+          // 1. Apaga tela de sleep IMEDIATAMENTE
+          sleepScreen.classList.remove('active');
+          sleepScreen.classList.add('hidden');
+
+          // 2. Garante que a home não esteja visível
+          home.classList.remove('active');
+          home.classList.add('hidden');
+
+          // 3. Restaura lockscreen
+          lockscreen.classList.remove('hidden');
+          lockscreenContent.style.transition = 'none';
+          lockscreenContent.style.transform = 'translateY(0)';
+
+          dynamicIsland.classList.remove('hidden');
+          gestureBar.classList.remove('hidden');
+
+          requestAnimationFrame(() => {
+            dynamicIsland.style.position = 'absolute'
+            dynamicIsland.classList.add('active');
+            lockscreen.classList.add('active');
+            gestureBar.classList.add('active');
+            lockscreenContent.appendChild(gestureBar);
+            lockscreenContent.insertBefore(dynamicIsland, lockscreenContent.firstChild);
+          });
+          break;
+
+        case STATES.LOCKED_SLEEP:
+          dynamicIsland.classList.remove('active');
+          sleepScreen.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            dynamicIsland.classList.add('hidden');
+            sleepScreen.classList.add('active');
+          });
+          break;
+
+        case STATES.UNLOCKING:
+          lockscreenContent.style.transition =
+            'transform 0.35s cubic-bezier(.2,.6,.3,1)';
+          lockscreenContent.style.transform = 'translateY(-100%)';
+
+          setTimeout(() => {
+            transition(STATES.UNLOCKED);
+          }, 400);
+          break;
+
+        case STATES.UNLOCKED:
+          lockscreen.classList.add('hidden');
+          lockscreen.classList.remove('active');
+
+          home.classList.remove('hidden');
+          gestureBar.classList.remove('active');
+          gestureBar.classList.add('hidden');
+
+          dynamicIsland.classList.add('active');
+          dynamicIsland.classList.remove('hidden');
+          home.insertBefore(dynamicIsland, home.firstChild);
+          requestAnimationFrame(() => {
+            home.classList.add('active');
+          });
+          break;
+      }
+    }
+
+    /* =========================
+       BOOT
+    ========================= */
+    function boot() {
+      bootScreen.classList.remove('hidden');
+
+      setTimeout(() => {
+        bootScreen.classList.add('active');
+      }, 200);
+
+      setTimeout(() => {
+        bootScreen.classList.remove('active');
+
+        setTimeout(() => {
+          bootScreen.classList.add('hidden');
+          transition(STATES.LOCKED_AWAKE);
+        }, 1200);
+
+      }, 4200);
+    }
+
+    /* =========================
+       POWER BUTTON (POINTER)
+    ========================= */
+    let pressTimer = null;
+    let isPressing = false;
+
+    powerButton.addEventListener('pointerdown', onPowerPressStart);
+    powerButton.addEventListener('pointerup', onPowerPressEnd);
+    powerButton.addEventListener('pointercancel', resetPowerPress);
+
+    async function onPowerPressStart() {
+      if (isPressing) return;
+      isPressing = true;
+
+      pressTimer = setTimeout(() => {
+        pressTimer = null;
+        onPowerLongPress();
+      }, 800);
+
+      if (!audio.paused) return;
+
+      await ctx.resume(); // unlock real
+      gain.gain.value = volume * 0.01;
+      audio.play();
+    }
+
+    function onPowerPressEnd() {
+      if (!isPressing) return;
+
+      if (pressTimer) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+        onPowerShortPress();
+      }
+
+      isPressing = false;
+    }
+
+    function resetPowerPress() {
+      if (pressTimer) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+      }
+      isPressing = false;
+    }
+
+    function onPowerLongPress() {
+      if (currentState === STATES.OFF) {
+        transition(STATES.BOOTING);
+      }
+    }
+
+    function onPowerShortPress() {
+      if (currentState === STATES.LOCKED_AWAKE) {
+        transition(STATES.LOCKED_SLEEP);
+      } else if (currentState === STATES.LOCKED_SLEEP) {
+        transition(STATES.LOCKED_AWAKE);
+      } else if (currentState === STATES.UNLOCKED) {
+        transition(STATES.LOCKED_SLEEP);
+      }
+    }
+
+    /* =========================
+       SWIPE UP (LOCKSCREEN)
+    ========================= */
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+    const swipeThreshold = 380;
+
+    lockscreen.addEventListener('pointerdown', swipeStart);
+    lockscreen.addEventListener('pointermove', swipeMove);
+    lockscreen.addEventListener('pointerup', swipeEnd);
+    lockscreen.addEventListener('pointercancel', swipeCancel);
+
+    function swipeStart(e) {
+      if (currentState !== STATES.LOCKED_AWAKE) return;
+
+      isDragging = true;
+      startY = e.clientY;
+      currentY = startY;
+
+      lockscreenContent.style.transition = 'none';
+      lockscreen.setPointerCapture(e.pointerId); // ESSENCIAL no desktop
+    }
+
+    function swipeMove(e) {
+      if (!isDragging) return;
+      if (currentState !== STATES.LOCKED_AWAKE) return;
+
+      currentY = e.clientY;
+      const delta = currentY - startY;
+
+      if (delta > 0) return;
+
+      lockscreenContent.style.transform = `translateY(${delta}px)`;
+    }
+
+    function swipeEnd(e) {
+      if (!isDragging) return;
+      if (currentState !== STATES.LOCKED_AWAKE) return;
+
+      isDragging = false;
+      lockscreen.releasePointerCapture(e.pointerId);
+
+      const delta = currentY - startY;
+
+      lockscreenContent.style.transition =
+        'transform 0.35s cubic-bezier(.2,.6,.3,1)';
+
+      if (delta < -swipeThreshold) {
+        transition(STATES.UNLOCKING);
+      } else {
+        lockscreenContent.style.transform = 'translateY(0)';
+      }
+    }
+
+    function swipeCancel() {
+      if (!isDragging) return;
+
+      isDragging = false;
+      lockscreenContent.style.transition = 'transform 0.3s ease';
+      lockscreenContent.style.transform = 'translateY(0)';
+    }
+
+  </script>
+
+  <script>
+    /* =========================
+   LOCKSCREEN TIME
+========================= */
+    const timeEl = document.querySelector('.lockscreen-time');
+    const dateEl = document.querySelector('.lockscreen-date');
+
+    function updateTime() {
+      const now = new Date();
+
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+
+      const weekday = now
+        .toLocaleDateString('pt-BR', { weekday: 'short' })
+        .replace('.', '');
+
+      const month = now
+        .toLocaleDateString('pt-BR', { month: 'short' })
+        .replace('.', '');
+
+      const day = now.getDate();
+
+      const formattedWeekday =
+        weekday[0].toUpperCase() + weekday.slice(1) + '.';
+
+      const formattedMonth = month.toLowerCase() + '.';
+
+      timeEl.textContent = `${hours}:${minutes}`;
+      dateEl.textContent = `${formattedWeekday} ${day} de ${formattedMonth}`;
+    }
+
+    // inicial
+    updateTime();
+
+    // atualiza só quando faz sentido (1x/min)
+    setInterval(updateTime, 60000);
+  </script>
+
+  <script>
+    let volume = 50;
+    let volumeTimeout = null;
+
+    function showVolumeHud() {
+      volumeLevel.style.height = `${volume}%`;
+
+      volumeHud.classList.remove('hidden');
+      volumeHud.classList.add('active');
+
+      clearTimeout(volumeTimeout);
+      volumeTimeout = setTimeout(() => {
+        volumeHud.classList.remove('active');
+        volumeTimeout = setTimeout(() => {
+          volumeHud.classList.add('hidden');
+        }, 250);
+      }, 1200);
+    }
+
+    function volumeUp() {
+      if (currentState === STATES.LOCKED_SLEEP) return;
+      volume = Math.min(100, volume + 5);
+      showVolumeHud();
+
+      gain.gain.value = volume * 0.01;
+    }
+
+    function volumeDown() {
+      if (currentState === STATES.LOCKED_SLEEP) return;
+      volume = Math.max(0, volume - 5);
+      showVolumeHud();
+
+      gain.gain.value = volume * 0.01;
+    }
+
+    volumeUpButton.addEventListener('click', volumeUp);
+    volumeDownButton.addEventListener('click', volumeDown);
+  </script>
+
+  <script>
+    const apps = document.querySelectorAll('.app');
+    const appContainer = document.querySelector('.app-container');
+    const appTitle = document.querySelector('.app-title');
+
+    function openApp(name) {
+      if (currentState !== STATES.UNLOCKED) return;
+
+      appTitle.textContent = name;
+
+      home.classList.remove('active');
+      gestureBar.classList.remove('hidden');
+
+      appContainer.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        appContainer.classList.add('active');
+
+        gestureBar.classList.add('active');
+        appContainer.appendChild(gestureBar);
+
+        setTimeout(() => {
+          gestureBar.classList.add('hidden');
+          gestureBar.classList.remove('active');
+        }, 1000);
+      });
+
+      if (!openApps.includes(name)) {
+        openApps.push(name);
+      }
+    }
+
+    function closeApp() {
+      appContainer.classList.remove('active');
+      appContainer.classList.add('hidden');
+      home.classList.add('active');
+    }
+
+    apps.forEach(app => {
+      app.addEventListener('click', () => {
+        openApp(app.dataset.app);
+      });
+    });
+  </script>
+
+  <script>
+    let gestureStartY = 0;
+    let gestureActive = false;
+    let gestureHoldTimer = null;
+
+    screen.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+      const y = e.clientY;
+      const rect = screen.getBoundingClientRect();
+      const bottomZone = rect.bottom - 40;
+
+      if (currentState === STATES.UNLOCKED && y > bottomZone) {
+        if (gestureBar.classList.contains('hidden')) {
+          gestureBar.classList.add('active');
+          gestureBar.classList.remove('hidden');
+
+          setTimeout(() => {
+            gestureBar.classList.add('hidden');
+            gestureBar.classList.remove('active');
+          }, 1000);
+        }
+
+        gestureStartY = y;
+        gestureActive = true;
+
+        screen.setPointerCapture(e.pointerId); // ESSENCIAL no desktop
+
+        gestureHoldTimer = setTimeout(() => {
+          openMultitask();
+        }, 250);
+      }
+    });
+
+    screen.addEventListener('pointermove', e => {
+      if (!gestureActive) return;
+      if (e.pointerType === 'mouse' && e.buttons !== 1) return;
+
+      const delta = e.clientY - gestureStartY;
+
+      if (delta < -10) {
+        gestureBar.classList.add('pull');
+      }
+    });
+
+    screen.addEventListener('pointerup', e => {
+      if (!gestureActive) return;
+
+      clearTimeout(gestureHoldTimer);
+      gestureBar.classList.remove('pull');
+      gestureActive = false;
+
+      screen.releasePointerCapture(e.pointerId);
+
+      const delta = e.clientY - gestureStartY;
+
+      // Swipe curto → fechar app
+      if (delta < -80 && appContainer.classList.contains('active')) {
+        closeApp();
+      }
+    });
+
+    screen.addEventListener('pointercancel', () => {
+      clearTimeout(gestureHoldTimer);
+      gestureBar.classList.remove('pull');
+      gestureActive = false;
+    });
+
+  </script>
+
+  <script>
+    let openApps = [];
+    let multitaskActive = false;
+
+    function openMultitask() {
+      if (currentState !== STATES.UNLOCKED) return;
+      if (multitaskActive) return;
+
+      multitaskActive = true;
+      renderMultitask();
+
+      multitask.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        multitask.classList.add('active');
+      });
+    }
+
+    function closeMultitask() {
+      multitask.classList.remove('active');
+      multitaskActive = false;
+
+      setTimeout(() => {
+        multitask.classList.add('hidden');
+      }, 300);
+    }
+
+    function renderMultitask() {
+      appCards.innerHTML = '';
+
+      openApps.forEach(app => {
+        const card = document.createElement('div');
+        card.className = 'app-card';
+        card.textContent = app;
+
+        card.addEventListener('click', () => {
+          closeMultitask();
+          openApp(app);
+        });
+
+        card.addEventListener('pointerdown', e => {
+          const startY = e.clientY;
+
+          card.addEventListener('pointerup', ev => {
+            const delta = ev.clientY - startY;
+            if (delta < -80) {
+              closeAppFromMultitask(app, card);
+            }
+          }, { once: true });
+        });
+
+        appCards.appendChild(card);
+      });
+    }
+
+    function closeAppFromMultitask(app, card) {
+      openApps = openApps.filter(a => a !== app);
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-100px)';
+
+      setTimeout(() => {
+        renderMultitask();
+      }, 250);
+    }
+
+    const upscale = document.querySelector('.up.scale');
+    const downscale = document.querySelector('.down.scale');
+    const iphone = document.querySelector('.iphone');
+    let scale = parseFloat(getComputedStyle(iphone).getPropertyValue('--scale')) || 1;
+
+    function setScale(delta) {
+      scale = Math.max(0.1, scale + delta); // evita scale inválido
+      iphone.style.setProperty('--scale', scale);
+    }
+
+    upscale.addEventListener('click', () => {
+      setScale(+0.1);
+      //iphone.style.transform = `scale()`;
+    });
+
+    downscale.addEventListener('click', () => {
+      setScale(-0.1);
+      //iphone.style.transform = `scale()`;
+    });
+  </script>
+
+  <script>
+    const t = {
+      ms: v => v,
+      s: v => v * 1_000,
+      min: v => v * 60_000,
+      h: v => v * 3_600_000
+    };
+
+    let batteryLevel = 100;
+
+    function increaseBatteryLevel() {
+      if (batteryLevel == 100) return;
+
+      batteryLevel = Math.max(0, Math.min(100, batteryLevel + 1));
+
+      battery.style.setProperty('--level', `${batteryLevel}%`);
+    }
+
+    function decreaseBatteryLevel() {
+      if (batteryLevel == 0) return;
+
+      batteryLevel = Math.max(0, Math.min(100, batteryLevel - 1));
+
+      battery.style.setProperty('--level', `${batteryLevel}%`);
+    }
+
+    setInterval(() => {
+      decreaseBatteryLevel();
+
+      if (batteryLevel == 0) {
+        transition(STATES.OFF);
+        return;
+      }
+
+      if (batteryLevel <= 20) {
+        battery.classList.add('low');
+      } else {
+        battery.classList.remove('low');
+      }
+
+      const signalLevel = Math.floor(Math.random() * 4) + 1;
+      const wifiLevel = Math.floor(Math.random() * 3) + 1;
+      signalBarsIcon.dataset.level = signalLevel;
+      wifiSignalIcon.dataset.level = wifiLevel;
+    }, t.s(60));
+  </script>
+
+</body>
+
+</html>
