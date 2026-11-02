@@ -5,6 +5,12 @@
     padding: 0;
 }
 
+/* foco visível para quem navega por teclado */
+:focus-visible {
+    outline: 2px solid #0a84ff;
+    outline-offset: 2px;
+}
+
 /* WALLPAPER (usado na home e no fundo do alternador de tarefas) */
 :root {
     --wallpaper: url('https://upload.wikimedia.org/wikipedia/commons/0/04/Our_Holy_Mother_Of_Perpetual_Succour.jpg');
@@ -83,18 +89,6 @@ button.scale {
     border-radius: 38px;
     background: #000;
     overflow: hidden;
-}
-
-/* CONTEÚDO DA TELA (placeholder) */
-.screen-content {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, #111, #000);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #555;
-    font-size: 14px;
 }
 
 /* ===== DYNAMIC ISLAND ===== */
@@ -248,6 +242,14 @@ button.scale {
     background: linear-gradient(#333, #111);
     border-radius: 3px;
     cursor: pointer;
+
+    /* power/volume são <button> de verdade (foco e teclado), sem o visual
+       padrão do agente de usuário */
+    border: 0;
+    padding: 0;
+    font: inherit;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 /* área de clique maior que a "régua" visível (6px é quase impossível de acertar) */
@@ -534,6 +536,9 @@ button.scale {
     z-index: 1;
     opacity: 0;
     transition: opacity 0.4s ease;
+    /* sem isso o navegador assume o arrasto vertical e cancela o gesto da
+       barra inferior (funcionava no mouse, falhava no toque) */
+    touch-action: none;
 }
 
 .home.active {
@@ -571,7 +576,8 @@ button.scale {
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
 
-    /* só 30% do topo */
+    /* desfoque em toda a área: a imagem de fundo da home já aparece "lavada"
+       atrás dos ícones */
     mask-image: linear-gradient(to bottom,
             black 0%,
             black 100%);
@@ -623,15 +629,6 @@ button.scale {
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
     background-color: white;
 }
-
-/*.app-icon {
-    width: 62px;
-    height: 62px;
-    margin: 0 auto 6px;
-    border-radius: 16px;
-    background: linear-gradient(145deg, #3a3a3c, #1c1c1e);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
-}*/
 
 .app-label {
     opacity: 0.85;
@@ -695,6 +692,8 @@ button.scale {
     opacity: 0;
     transform: scale(0.9);
     transition: transform 0.35s ease, opacity 0.35s ease;
+    /* mesmo caso da home: o arrasto da barra inferior nasce dentro do app */
+    touch-action: none;
 }
 
 .app-container.active {
@@ -793,6 +792,9 @@ button.scale {
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    /* os cards continuam rolando na horizontal; o arrasto vertical (fechar o
+       card) não é tomado pelo navegador */
+    touch-action: pan-x;
 }
 
 /* centraliza quando os cards cabem, mas deixa rolar sem cortar o primeiro
