@@ -11,7 +11,7 @@
 
 <body>
 
-  <button class="up scale">+</button>
+  <button type="button" class="up scale" aria-label="Aumentar escala">+</button>
 
   <div class="iphone">
     <div class="button silent"></div>
@@ -118,24 +118,7 @@
           <img class="home-screen-image"
             src="https://upload.wikimedia.org/wikipedia/commons/0/04/Our_Holy_Mother_Of_Perpetual_Succour.jpg" alt="" />
         </div>
-        <div class="app-grid">
-          <div class="app" data-app="Safari">
-            <div class="app-icon"></div>
-            <span class="app-label">Safari</span>
-          </div>
-          <div class="app" data-app="Fotos">
-            <div class="app-icon"></div>
-            <span class="app-label">Fotos</span>
-          </div>
-          <div class="app" data-app="Ajustes">
-            <div class="app-icon"></div>
-            <span class="app-label">Ajustes</span>
-          </div>
-          <div class="app" data-app="App">
-            <div class="app-icon"></div>
-            <span class="app-label">App</span>
-          </div>
-        </div>
+        <div class="app-grid"></div>
       </div>
 
       <div class="app-container hidden">
@@ -169,9 +152,9 @@
     <div class="glass"></div>
   </div>
 
-  <button class="down scale">-</button>
+  <button type="button" class="down scale" aria-label="Diminuir escala">-</button>
 
-  <audio src="./audio.mp3" autoplay></audio>
+  <audio src="./audio.mp3" preload="auto"></audio>
 
   <script>
     /* =========================
@@ -207,33 +190,76 @@
     const battery = document.querySelector('.battery');
     const home = document.querySelector('.home');
     const gestureBar = document.querySelector('.gesture-bar');
+    const appContainerEl = document.querySelector('.app-container');
     const multitask = document.querySelector('.multitask');
     const appCards = document.querySelector('.app-cards');
     const audio = document.querySelector('audio');
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AudioContext();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 
-    const source = ctx.createMediaElementSource(audio);
-    const gain = ctx.createGain();
+    let volume = 50;
+    let audioCtx = null;
+    let audioGain = null;
 
-    source.connect(gain).connect(ctx.destination);
+    function applyVolume() {
+      if (audioGain) audioGain.gain.value = volume * 0.01;
+    }
+
+    /* O contexto só pode ser criado/retomado a partir de um gesto do usuário.
+       Antes ele era criado no load (fica suspenso) e o audio.play() rejeitava
+       sem tratamento — o erro estourava no console. */
+    function initAudio() {
+      if (audioCtx || !AudioContextClass) return;
+
+      try {
+        audioCtx = new AudioContextClass();
+        audioGain = audioCtx.createGain();
+        audioCtx.createMediaElementSource(audio)
+          .connect(audioGain)
+          .connect(audioCtx.destination);
+
+        applyVolume();
+      } catch (err) {
+        console.warn('Áudio indisponível:', err);
+        audioCtx = null;
+        audioGain = null;
+      }
+    }
+
+    async function startAudio() {
+      initAudio();
+      if (!audioCtx) return;
+
+      try {
+        if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+        applyVolume();
+
+        if (audio.paused) await audio.play();
+      } catch (err) {
+        // autoplay bloqueado ou audio.mp3 ausente: o mockup segue funcionando sem som
+      }
+    }
 
     /* =========================
        FSM CORE
     ========================= */
+    const TRANSITIONS = {
+      OFF: [STATES.BOOTING],
+      BOOTING: [STATES.LOCKED_AWAKE],
+      LOCKED_AWAKE: [STATES.LOCKED_SLEEP, STATES.UNLOCKING, STATES.OFF],
+      LOCKED_SLEEP: [STATES.LOCKED_AWAKE, STATES.OFF],
+      UNLOCKING: [STATES.UNLOCKED],
+      UNLOCKED: [STATES.LOCKED_SLEEP, STATES.OFF]
+    };
+
     function transition(to) {
       if (currentState === to) return;
 
-      const valid = {
-        OFF: [STATES.BOOTING],
-        BOOTING: [STATES.LOCKED_AWAKE],
-        LOCKED_AWAKE: [STATES.LOCKED_SLEEP, STATES.UNLOCKING],
-        LOCKED_SLEEP: [STATES.LOCKED_AWAKE],
-        UNLOCKING: [STATES.UNLOCKED],
-        UNLOCKED: [STATES.LOCKED_SLEEP]
-      };
+      // o estado OFF era inalcançável: nenhum estado aceitava ir para ele,
+      // então a bateria em 0 não desligava nada e o long press nunca fazia sentido
+      const allowed = TRANSITIONS[currentState] || [];
 
-      if (!valid[currentState].includes(to)) {
+      if (!allowed.includes(to)) {
         console.warn(`FSM: transição inválida ${currentState} → ${to}`);
         return;
       }
@@ -241,6 +267,14 @@
       exitState(currentState);
       currentState = to;
       enterState(to);
+    }
+
+    /* =========================
+       RESET DO APP ABERTO
+    ========================= */
+    function resetAppView() {
+      appContainerEl.classList.remove('active');
+      appContainerEl.classList.add('hidden');
     }
 
     /* =========================
@@ -255,9 +289,11 @@
           break;
 
         case STATES.UNLOCKED:
+          resetAppView();
+          if (typeof resetMultitask === 'function') resetMultitask();
           home.classList.remove('active');
           home.classList.add('hidden');
-          gestureBar.classList.remove('active');
+          gestureBar.classList.remove('active', 'pull');
           gestureBar.classList.add('hidden');
           break;
 
@@ -279,7 +315,9 @@
           sleepScreen.classList.remove('active');
           sleepScreen.classList.add('hidden');
 
-          // 2. Garante que a home não esteja visível
+          // 2. Garante que home/app/multitarefa não estejam visíveis
+          resetAppView();
+          if (typeof resetMultitask === 'function') resetMultitask();
           home.classList.remove('active');
           home.classList.add('hidden');
 
@@ -292,7 +330,6 @@
           gestureBar.classList.remove('hidden');
 
           requestAnimationFrame(() => {
-            dynamicIsland.style.position = 'absolute'
             dynamicIsland.classList.add('active');
             lockscreen.classList.add('active');
             gestureBar.classList.add('active');
@@ -324,6 +361,10 @@
           lockscreen.classList.add('hidden');
           lockscreen.classList.remove('active');
 
+          // garante que nenhum app/multitarefa fique "preso" por cima da home
+          resetAppView();
+          if (typeof resetMultitask === 'function') resetMultitask();
+
           home.classList.remove('hidden');
           gestureBar.classList.remove('active');
           gestureBar.classList.add('hidden');
@@ -334,6 +375,28 @@
           requestAnimationFrame(() => {
             home.classList.add('active');
           });
+          break;
+
+        case STATES.OFF:
+          resetAppView();
+          if (typeof resetMultitask === 'function') resetMultitask();
+
+          lockscreen.classList.remove('active');
+          lockscreen.classList.add('hidden');
+          home.classList.remove('active');
+          home.classList.add('hidden');
+          bootScreen.classList.remove('active');
+          bootScreen.classList.add('hidden');
+          sleepScreen.classList.remove('active');
+          sleepScreen.classList.add('hidden');
+          dynamicIsland.classList.remove('active');
+          dynamicIsland.classList.add('hidden');
+          gestureBar.classList.remove('active', 'pull');
+          gestureBar.classList.add('hidden');
+          volumeHud.classList.remove('active');
+          volumeHud.classList.add('hidden');
+          lockscreenContent.style.transition = '';
+          lockscreenContent.style.transform = '';
           break;
       }
     }
@@ -368,21 +431,28 @@
     powerButton.addEventListener('pointerdown', onPowerPressStart);
     powerButton.addEventListener('pointerup', onPowerPressEnd);
     powerButton.addEventListener('pointercancel', resetPowerPress);
+    // se o navegador perder a captura do ponteiro, libera o botão
+    powerButton.addEventListener('lostpointercapture', resetPowerPress);
 
-    async function onPowerPressStart() {
+    function onPowerPressStart(e) {
       if (isPressing) return;
       isPressing = true;
+
+      // captura o ponteiro: sem isso, soltar o mouse fora do botão deixava
+      // isPressing travado em true e o botão parava de responder
+      if (e && e.pointerId !== undefined) {
+        try {
+          powerButton.setPointerCapture(e.pointerId);
+        } catch (err) { /* ignore */ }
+      }
 
       pressTimer = setTimeout(() => {
         pressTimer = null;
         onPowerLongPress();
       }, 800);
 
-      if (!audio.paused) return;
-
-      await ctx.resume(); // unlock real
-      gain.gain.value = volume * 0.01;
-      audio.play();
+      // não bloqueia o fluxo do clique; falhas de autoplay são ignoradas
+      startAudio();
     }
 
     function onPowerPressEnd() {
@@ -407,7 +477,15 @@
 
     function onPowerLongPress() {
       if (currentState === STATES.OFF) {
+        // aparelho desligado → liga
         transition(STATES.BOOTING);
+      } else if (
+        currentState === STATES.LOCKED_AWAKE ||
+        currentState === STATES.LOCKED_SLEEP ||
+        currentState === STATES.UNLOCKED
+      ) {
+        // aparelho ligado → desliga (torna o estado OFF alcançável)
+        transition(STATES.OFF);
       }
     }
 
@@ -442,7 +520,9 @@
       currentY = startY;
 
       lockscreenContent.style.transition = 'none';
-      lockscreen.setPointerCapture(e.pointerId); // ESSENCIAL no desktop
+      try {
+        lockscreen.setPointerCapture(e.pointerId); // ESSENCIAL no desktop
+      } catch (err) { /* captura indisponível: o arrasto continua pelo bubbling */ }
     }
 
     function swipeMove(e) {
@@ -459,10 +539,14 @@
 
     function swipeEnd(e) {
       if (!isDragging) return;
-      if (currentState !== STATES.LOCKED_AWAKE) return;
 
       isDragging = false;
-      lockscreen.releasePointerCapture(e.pointerId);
+
+      if (lockscreen.hasPointerCapture(e.pointerId)) {
+        lockscreen.releasePointerCapture(e.pointerId);
+      }
+
+      if (currentState !== STATES.LOCKED_AWAKE) return;
 
       const delta = currentY - startY;
 
@@ -476,10 +560,15 @@
       }
     }
 
-    function swipeCancel() {
+    function swipeCancel(e) {
       if (!isDragging) return;
 
       isDragging = false;
+
+      if (e && lockscreen.hasPointerCapture(e.pointerId)) {
+        lockscreen.releasePointerCapture(e.pointerId);
+      }
+
       lockscreenContent.style.transition = 'transform 0.3s ease';
       lockscreenContent.style.transform = 'translateY(0)';
     }
@@ -526,7 +615,6 @@
   </script>
 
   <script>
-    let volume = 50;
     let volumeTimeout = null;
 
     function showVolumeHud() {
@@ -545,23 +633,73 @@
     }
 
     function volumeUp() {
-      if (currentState === STATES.LOCKED_SLEEP) return;
+      if (currentState === STATES.LOCKED_SLEEP || currentState === STATES.OFF) return;
       volume = Math.min(100, volume + 5);
       showVolumeHud();
 
-      gain.gain.value = volume * 0.01;
+      applyVolume();
     }
 
     function volumeDown() {
-      if (currentState === STATES.LOCKED_SLEEP) return;
+      if (currentState === STATES.LOCKED_SLEEP || currentState === STATES.OFF) return;
       volume = Math.max(0, volume - 5);
       showVolumeHud();
 
-      gain.gain.value = volume * 0.01;
+      applyVolume();
     }
 
     volumeUpButton.addEventListener('click', volumeUp);
     volumeDownButton.addEventListener('click', volumeDown);
+  </script>
+
+  <script>
+    // Adicionar apps ao app-grid
+    const appGrid = document.querySelector('.app-grid');
+    const appsData = [
+      {
+        name: 'Safari',
+        icon: 'https://cdn-icons-png.flaticon.com/512/564/564442.png'
+      },
+      {
+        name: 'Fotos',
+        icon: 'https://cdn.iconscout.com/icon/free/png-512/free-apple-photos-icon-svg-download-png-493155.png?f=webp&w=256'
+      },
+      {
+        name: 'Câmera',
+        icon: 'https://cdn.iconscout.com/icon/free/png-512/free-apple-camera-icon-svg-download-png-493147.png?f=webp&w=256'
+      },
+      {
+        name: 'Calendário',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/MacOSCalendar.png'
+      },
+      {
+        name: 'App Store',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/6/67/App_Store_%28iOS%29.svg'
+      },
+      {
+        name: 'Ajustes',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Settings_%28iOS%29.png'
+      }
+    ];
+
+    appsData.forEach(app => {
+      const appDiv = document.createElement('div');
+      appDiv.classList.add('app');
+      appDiv.dataset.app = app.name;
+
+      const appIcon = document.createElement('div');
+      appIcon.classList.add('app-icon');
+      appIcon.style.backgroundImage = `url(${app.icon})`;
+
+      const appLabel = document.createElement('span');
+      appLabel.classList.add('app-label');
+      appLabel.textContent = app.name;
+
+      appDiv.appendChild(appIcon);
+      appDiv.appendChild(appLabel);
+      appGrid.appendChild(appDiv);
+    });
+
   </script>
 
   <script>
@@ -572,15 +710,20 @@
     function openApp(name) {
       if (currentState !== STATES.UNLOCKED) return;
 
+      if (multitaskActive) closeMultitask();
+
       appTitle.textContent = name;
 
       home.classList.remove('active');
-      gestureBar.classList.remove('hidden');
 
       appContainer.classList.remove('hidden');
       requestAnimationFrame(() => {
         appContainer.classList.add('active');
 
+        // status bar também visível dentro do app
+        appContainer.appendChild(dynamicIsland);
+
+        gestureBar.classList.remove('hidden');
         gestureBar.classList.add('active');
         appContainer.appendChild(gestureBar);
 
@@ -596,9 +739,26 @@
     }
 
     function closeApp() {
+      // devolve a status bar para a home
+      home.insertBefore(dynamicIsland, home.firstChild);
+
+      gestureBar.classList.remove('active', 'pull');
+      gestureBar.classList.add('hidden');
+
+      // anima o app "encolhendo" em direção ao ícone antes de esconder
       appContainer.classList.remove('active');
-      appContainer.classList.add('hidden');
-      home.classList.add('active');
+      setTimeout(() => {
+        if (appContainer.classList.contains('active')) return;
+        appContainer.classList.add('hidden');
+        appContainer.style.transform = '';
+        appContainer.style.opacity = '';
+        appContainer.style.transition = '';
+      }, 360);
+
+      if (currentState === STATES.UNLOCKED) {
+        home.classList.remove('hidden');
+        home.classList.add('active');
+      }
     }
 
     apps.forEach(app => {
@@ -609,37 +769,66 @@
   </script>
 
   <script>
+    /* =========================
+       GESTO DA BARRA INFERIOR (iOS)
+       - deslizar para cima e soltar rápido  → fecha o app (volta pra home)
+       - deslizar para cima e pausar         → alternador de tarefas
+       Segurar parado NÃO abre o alternador (isso não existe no iOS).
+    ========================= */
+    const SWIPE_CLOSE_DISTANCE = 60;  // px para cima que confirmam o swipe
+    const SWIPE_PAUSE_MS = 220;       // pausa após subir que abre o alternador
+
     let gestureStartY = 0;
     let gestureActive = false;
     let gestureHoldTimer = null;
+    let gestureOpenedMultitask = false;
+    let gestureMoved = false;
+
+    function showGestureBar() {
+      gestureBar.classList.remove('hidden');
+      gestureBar.classList.add('active');
+    }
+
+    function hideGestureBar(delay = 0) {
+      clearTimeout(gestureBarHideTimer);
+      gestureBarHideTimer = setTimeout(() => {
+        if (gestureActive) return;
+        gestureBar.classList.remove('active', 'pull');
+        gestureBar.classList.add('hidden');
+      }, delay);
+    }
+
+    let gestureBarHideTimer = null;
+
+    function resetAppDrag() {
+      appContainer.style.transition = '';
+      appContainer.style.transform = '';
+      appContainer.style.opacity = '';
+    }
 
     screen.addEventListener('pointerdown', e => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (currentState !== STATES.UNLOCKED) return;
+      if (multitaskActive) return; // o overlay do multitarefa está por cima
 
       const y = e.clientY;
       const rect = screen.getBoundingClientRect();
-      const bottomZone = rect.bottom - 40;
 
-      if (currentState === STATES.UNLOCKED && y > bottomZone) {
-        if (gestureBar.classList.contains('hidden')) {
-          gestureBar.classList.add('active');
-          gestureBar.classList.remove('hidden');
+      if (y <= rect.bottom - 40) return; // fora da zona da barra inferior
 
-          setTimeout(() => {
-            gestureBar.classList.add('hidden');
-            gestureBar.classList.remove('active');
-          }, 1000);
-        }
+      gestureStartY = y;
+      gestureActive = true;
+      gestureMoved = false;
+      gestureOpenedMultitask = false;
 
-        gestureStartY = y;
-        gestureActive = true;
+      showGestureBar();
 
+      // o app acompanha o dedo sem transição
+      appContainer.style.transition = 'none';
+
+      try {
         screen.setPointerCapture(e.pointerId); // ESSENCIAL no desktop
-
-        gestureHoldTimer = setTimeout(() => {
-          openMultitask();
-        }, 250);
-      }
+      } catch (err) { /* captura indisponível: o arrasto continua pelo bubbling */ }
     });
 
     screen.addEventListener('pointermove', e => {
@@ -647,9 +836,32 @@
       if (e.pointerType === 'mouse' && e.buttons !== 1) return;
 
       const delta = e.clientY - gestureStartY;
+      if (delta >= 0) return; // só interessa arrastar para cima
 
-      if (delta < -10) {
+      const up = -delta;
+
+      if (up > 8) {
+        gestureMoved = true;
         gestureBar.classList.add('pull');
+      }
+
+      // app encolhendo em direção ao ícone, seguindo o dedo
+      if (appContainer.classList.contains('active')) {
+        const progress = Math.min(1, up / 320);
+        appContainer.style.transform =
+          `translateY(${-up * 0.25}px) scale(${1 - 0.12 * progress})`;
+        appContainer.style.opacity = String(1 - 0.2 * progress);
+      }
+
+      // subiu e pausou → alternador de tarefas (também na tela inicial)
+      if (gestureMoved && !gestureOpenedMultitask) {
+        clearTimeout(gestureHoldTimer);
+        gestureHoldTimer = setTimeout(() => {
+          if (!gestureActive) return;
+
+          gestureOpenedMultitask = true;
+          openMultitask();
+        }, SWIPE_PAUSE_MS);
       }
     });
 
@@ -660,20 +872,33 @@
       gestureBar.classList.remove('pull');
       gestureActive = false;
 
-      screen.releasePointerCapture(e.pointerId);
+      if (screen.hasPointerCapture(e.pointerId)) {
+        screen.releasePointerCapture(e.pointerId);
+      }
 
       const delta = e.clientY - gestureStartY;
+      const appWasOpen = appContainer.classList.contains('active');
 
-      // Swipe curto → fechar app
-      if (delta < -80 && appContainer.classList.contains('active')) {
+      // devolve o controle da animação ao CSS
+      resetAppDrag();
+
+      if (gestureOpenedMultitask) return;
+
+      // swipe rápido para cima → fecha o app
+      if (appWasOpen && delta < -SWIPE_CLOSE_DISTANCE) {
         closeApp();
+        return;
       }
+
+      hideGestureBar(600);
     });
 
     screen.addEventListener('pointercancel', () => {
       clearTimeout(gestureHoldTimer);
       gestureBar.classList.remove('pull');
       gestureActive = false;
+      resetAppDrag();
+      hideGestureBar(600);
     });
 
   </script>
@@ -689,6 +914,9 @@
       multitaskActive = true;
       renderMultitask();
 
+      // status bar visível também no alternador
+      multitask.insertBefore(dynamicIsland, multitask.firstChild);
+
       multitask.classList.remove('hidden');
       requestAnimationFrame(() => {
         multitask.classList.add('active');
@@ -696,13 +924,41 @@
     }
 
     function closeMultitask() {
-      multitask.classList.remove('active');
+      if (!multitaskActive) return;
+
       multitaskActive = false;
+      multitask.classList.remove('active');
+
+      // devolve a status bar para o app (se aberto) ou para a home
+      if (appContainer.classList.contains('active')) {
+        appContainer.appendChild(dynamicIsland);
+      } else {
+        home.insertBefore(dynamicIsland, home.firstChild);
+      }
 
       setTimeout(() => {
-        multitask.classList.add('hidden');
+        if (!multitaskActive) multitask.classList.add('hidden');
       }, 300);
     }
+
+    // usado pelo FSM ao bloquear/desligar o aparelho
+    function resetMultitask() {
+      multitaskActive = false;
+      multitask.classList.remove('active');
+      multitask.classList.add('hidden');
+      appCards.innerHTML = '';
+      home.insertBefore(dynamicIsland, home.firstChild);
+    }
+
+    // antes não havia como fechar o multitarefa sem abrir um app:
+    // tocar no fundo (ou ESC) agora fecha
+    multitask.addEventListener('click', e => {
+      if (!e.target.closest('.app-card')) closeMultitask();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && multitaskActive) closeMultitask();
+    });
 
     function renderMultitask() {
       appCards.innerHTML = '';
@@ -712,17 +968,32 @@
         card.className = 'app-card';
         card.textContent = app;
 
+        // evita que o "swipe para cima" (fechar card) dispare também o clique,
+        // que reabria o app que acabou de ser fechado
+        let swiped = false;
+
         card.addEventListener('click', () => {
+          if (swiped) {
+            swiped = false;
+            return;
+          }
+
           closeMultitask();
           openApp(app);
         });
 
         card.addEventListener('pointerdown', e => {
           const startY = e.clientY;
+          swiped = false;
+
+          try {
+            card.setPointerCapture(e.pointerId);
+          } catch (err) { /* ignore */ }
 
           card.addEventListener('pointerup', ev => {
             const delta = ev.clientY - startY;
             if (delta < -80) {
+              swiped = true;
               closeAppFromMultitask(app, card);
             }
           }, { once: true });
@@ -790,23 +1061,21 @@
     }
 
     setInterval(() => {
-      decreaseBatteryLevel();
-
-      if (batteryLevel == 0) {
-        transition(STATES.OFF);
-        return;
-      }
-
-      if (batteryLevel <= 20) {
-        battery.classList.add('low');
-      } else {
-        battery.classList.remove('low');
-      }
-
+      // sinal e Wi-Fi variam independentemente do nível da bateria
       const signalLevel = Math.floor(Math.random() * 4) + 1;
       const wifiLevel = Math.floor(Math.random() * 3) + 1;
       signalBarsIcon.dataset.level = signalLevel;
       wifiSignalIcon.dataset.level = wifiLevel;
+
+      if (batteryLevel === 0) return;
+
+      decreaseBatteryLevel();
+      battery.classList.toggle('low', batteryLevel <= 20);
+
+      // bateria zerada desliga o aparelho (OFF agora é uma transição válida)
+      if (batteryLevel === 0) {
+        transition(STATES.OFF);
+      }
     }, t.s(60));
   </script>
 
